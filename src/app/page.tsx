@@ -10,7 +10,7 @@ export type WidgetContent = {
 };
 
 function Home() {
-  const { widgets, loading, createWidget, removeWidget, updateWidgetText } =
+  const { widgets, loading, error, createWidget, removeWidget, updateWidgetText } =
     useManageWidgets();
 
   return (
@@ -23,6 +23,7 @@ function Home() {
             + Create
           </button>
         </header>
+        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.widgetList}>
           {widgets.map((entry) => (
             <Widget

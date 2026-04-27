@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { removeWidget, updateWidget } from "../../../../utils/store";
+import { removeWidget, updateWidget } from "@/lib/store";
 import { WidgetContent } from "@/utils/types";
 
 export async function PUT(
@@ -10,7 +10,9 @@ export async function PUT(
   const { body } = await request.json();
   const updated = updateWidget(id, body);
   if (!updated)
-    return NextResponse.json({ error: "Widget not found" } as never, { status: 404 });
+    return NextResponse.json({ error: "Widget not found" } as never, {
+      status: 404,
+    });
   return NextResponse.json(updated);
 }
 
