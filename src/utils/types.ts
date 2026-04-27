@@ -3,3 +3,5 @@ export type WidgetContent = {
   body: string;
   createdAt: Date;
 };
+
+export type WidgetId = Pick<WidgetContent, "id">;

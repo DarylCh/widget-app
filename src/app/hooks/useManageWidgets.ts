@@ -1,25 +1,12 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { WidgetContent } from "@/app/types";
-import { getWidgets, postWidget, deleteWidget } from "../clients/widgetsClient";
-
-export const sampleData: WidgetContent[] = [
-  {
-    id: "1",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    createdAt: new Date("2024-01-01"),
-  },
-  {
-    id: "2",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-    createdAt: new Date("2024-01-02"),
-  },
-  {
-    id: "3",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet consectetur adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam.",
-    createdAt: new Date("2024-01-03"),
-  },
-];
+import { WidgetContent } from "@/utils/types";
+import {
+  getWidgets,
+  postWidget,
+  deleteWidget,
+  putWidget,
+} from "../clients/widgetsClient";
 
 export function useManageWidgets() {
   const [widgets, setWidgets] = useState<WidgetContent[]>([]);
@@ -33,9 +20,9 @@ export function useManageWidgets() {
       .finally(() => setLoading(false));
   }, []);
 
-  const createWidget = useCallback(async (body?: string) => {
+  const createWidget = useCallback(async () => {
     try {
-      const newWidget = await postWidget(body ?? "");
+      const newWidget = await postWidget();
       setWidgets((prev) => [newWidget, ...prev]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create widget");
@@ -51,5 +38,21 @@ export function useManageWidgets() {
     }
   }, []);
 
-  return { widgets, loading, error, createWidget, removeWidget };
+  const updateWidgetText = useCallback(async (id: string, body: string) => {
+    try {
+      const updated = await putWidget(id, body);
+      setWidgets((prev) => prev.map((w) => (w.id === id ? updated : w)));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update widget");
+    }
+  }, []);
+
+  return {
+    widgets,
+    loading,
+    error,
+    createWidget,
+    removeWidget,
+    updateWidgetText,
+  };
 }

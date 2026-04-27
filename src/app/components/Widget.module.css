@@ -1,0 +1,45 @@
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+}
+
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  min-height: 120px;
+  font-family: inherit;
+  border: none;
+  border-radius: 8px;
+  resize: none;
+  background: #fff;
+  color: inherit;
+  outline: none;
+  overflow: hidden;
+}
+
+.deleteButton {
+  align-self: flex-end;
+  padding: 6px 14px;
+  background: transparent;
+  color: #6b7280;
+  border: 1px solid #6b7280;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.deleteButton:hover:not(:disabled) {
+  background: #6b7280;
+  color: #fff;
+}
+
+.deleteButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

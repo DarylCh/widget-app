@@ -1,6 +1,7 @@
 "use client";
 import { Widget } from "./components/Widget";
 import { useManageWidgets } from "./hooks/useManageWidgets";
+import styles from "./page.module.css";
 
 export type WidgetContent = {
   id: string;
@@ -9,35 +10,31 @@ export type WidgetContent = {
 };
 
 function Home() {
-  const { widgets, loading, createWidget, removeWidget } = useManageWidgets();
+  const { widgets, loading, createWidget, removeWidget, updateWidgetText } =
+    useManageWidgets();
 
   return (
-    <>
-      <section id="spacer">
-        <h2>Widget Creator</h2>
-        <button disabled={loading} onClick={() => createWidget()}>
-          <p>Create widget</p>
-        </button>
-      </section>
-      <section
-        id="widgets"
-        style={{
-          margin: "0 auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-        }}
-      >
-        <h2>Widgets</h2>
-        {widgets.map((entry) => (
-          <Widget
-            key={entry.id}
-            body={entry.body}
-            onDelete={async () => await removeWidget(entry.id)}
-          />
-        ))}
-      </section>
-    </>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <h2>Widget Generator</h2>
+          <p className={styles.subheading}>Create a widget</p>
+          <button className={styles.createButton} disabled={loading} onClick={() => createWidget()}>
+            + Create
+          </button>
+        </header>
+        <div className={styles.widgetList}>
+          {widgets.map((entry) => (
+            <Widget
+              key={entry.id}
+              body={entry.body}
+              onUpdateText={(text: string) => updateWidgetText(entry.id, text)}
+              onDelete={() => removeWidget(entry.id)}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
