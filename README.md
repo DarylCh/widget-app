@@ -87,7 +87,7 @@ The app uses Next.js App Router with API routes for the backend and React client
 
 **API** follows a standard REST structure: `GET /api/widgets`, `POST /api/widgets`, `PUT /api/widgets/:id`, `DELETE /api/widgets/:id`.
 
-**State** is managed in a single `useManageWidgets` hook that fetches on mount and exposes `createWidget`, `updateWidgetText`, and `removeWidget` callbacks. All mutations await the server response before updating local state, keeping the client in sync with the backend at all times. The page component is kept thin — it only renders and delegates.
+**State** is managed in a single `useManageWidgets` hook that acts as the client-side orchestrator — it owns all widget state, coordinates calls to `apiClient`, and exposes a clean interface (`widgets`, `loading`, `error`, `createWidget`, `updateWidgetText`, `removeWidget`) to the UI. All mutations await the server response before updating local state, keeping the client in sync with the backend at all times. The page component is kept thin — it only renders and delegates.
 
 **Persistence** is triggered by `onBlur` on the textarea, so a PUT request fires once when the user finishes editing rather than on every keystroke.
 
@@ -124,6 +124,7 @@ The list endpoint includes an O(n log n) sort by `createdAt`. Total storage is O
 
 - **Add authentication** — scope widgets to individual users with proper auth so the store and API routes are not publicly accessible.
 - **Persist to a real database** — move from the in-memory store to a document database or SQLite so data survives server restarts and scales beyond a single process.
+- **Local cache layer** — introduce a client-side cache (e.g. SQLite via OPFS, or a library like React Query) managed by the `useManageWidgets` orchestrator. The hook would serve reads from cache instantly and sync writes to the API in the background, keeping the UI fast without sacrificing consistency.
 - **End-to-end tests** — the current tests cover units and component rendering well, but e2e tests would verify the full create → edit → refresh → persist flow in a real browser.
 - **Optimistic updates with rollback** — mutations currently wait for the server before updating state. Adding optimistic updates (patch state immediately, roll back on failure) would make the UI feel more responsive, at the cost of needing to restore the previous state reliably on error.
 - **Cursor-based pagination** — the list endpoint currently returns all widgets. Since widgets are ordered by `createdAt`, a cursor-based approach (e.g. `?after=<createdAt timestamp>`) would allow efficient incremental loading without the inconsistency issues of offset pagination.
