@@ -1,6 +1,6 @@
 # Widget App
 
-A full-stack web application where users can create, edit, and delete independent text widgets. Each widget holds its own content — typing and clicking away persists the text to the backend, and refreshing the page restores everything as it was.
+A full-stack web application for creating and managing independent text widgets. Users can add widgets, edit their content, and delete them individually. Text is auto-saved as you type, persisted to a REST API, and restored on page refresh. The text widgets grow to fit content and the UI stays responsive throughout.
 
 ## Tech Stack
 
@@ -9,15 +9,6 @@ A full-stack web application where users can create, edit, and delete independen
 - **TypeScript** — strict mode throughout
 - **Vitest + React Testing Library** — unit and component tests
 - **Docker** — multi-stage build with standalone Next.js output
-
-## Features
-
-- Add multiple text widgets via a single button
-- Each widget is independent with its own editable text area
-- Text is persisted to the backend on blur
-- Widgets survive page refreshes
-- Widgets can be deleted individually
-- Textarea auto-resizes to fit content, including on viewport resize
 
 ## Prerequisites
 
