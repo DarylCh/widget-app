@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { Widget } from "../app/components/Widget";
+import { Widget } from "./Widget";
 
 const noop = vi.fn().mockResolvedValue(undefined);
 

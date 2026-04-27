@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { removeWidget, updateWidget } from "@/lib/store";
+import { widgetStore } from "@/lib/widgetStore";
 import { WidgetContent } from "@/utils/types";
 
 export async function PUT(
@@ -8,7 +8,7 @@ export async function PUT(
 ): Promise<NextResponse<WidgetContent>> {
   const { id } = await params;
   const { body } = await request.json();
-  const updated = updateWidget(id, body);
+  const updated = widgetStore.update(id, body);
   if (!updated)
     return NextResponse.json({ error: "Widget not found" } as never, {
       status: 404,
@@ -21,7 +21,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse> {
   const { id } = await params;
-  const deleted = removeWidget(id);
+  const deleted = widgetStore.remove(id);
   if (!deleted)
     return NextResponse.json({ error: "Widget not found" }, { status: 404 });
   return new NextResponse(null, { status: 204 });

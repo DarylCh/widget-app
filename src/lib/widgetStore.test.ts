@@ -1,14 +1,16 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {
-  getAllWidgets,
-  createWidget,
-  updateWidget,
-  removeWidget,
-} from "@/lib/store";
+import { widgetStore } from "@/lib/widgetStore";
+
+const {
+  getAll: getAllWidgets,
+  create: createWidget,
+  update: updateWidget,
+  remove: removeWidget,
+} = widgetStore;
 
 // Reset the global store before each test to ensure isolation
 beforeEach(() => {
-  const store = globalThis.widgetStore;
+  const store = globalThis.__widgetStore;
   if (store) {
     for (const key of Object.keys(store)) {
       delete store[key];
@@ -16,7 +18,7 @@ beforeEach(() => {
   }
 });
 
-describe("getAllWidgets", () => {
+describe("widgetStore.getAll", () => {
   it("returns an empty array when no widgets exist", () => {
     expect(getAllWidgets()).toEqual([]);
   });
@@ -38,7 +40,7 @@ describe("getAllWidgets", () => {
   });
 });
 
-describe("createWidget", () => {
+describe("widgetStore.create", () => {
   it("returns a widget with a unique id, empty body and a createdAt date", () => {
     const widget = createWidget();
     expect(widget.id).toBeTruthy();
@@ -53,7 +55,7 @@ describe("createWidget", () => {
   });
 });
 
-describe("updateWidget", () => {
+describe("widgetStore.update", () => {
   it("updates the body of an existing widget", () => {
     const { id } = createWidget();
     const updated = updateWidget(id, "new body");
@@ -74,7 +76,7 @@ describe("updateWidget", () => {
   });
 });
 
-describe("removeWidget", () => {
+describe("widgetStore.remove", () => {
   it("removes an existing widget and returns its id", () => {
     const { id } = createWidget();
     expect(removeWidget(id)).toBe(id);

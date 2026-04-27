@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./Widget.module.css";
 
+const DEBOUNCE_MS = 500;
+
 type WidgetProps = {
   body: string;
   onUpdateText: (text: string) => Promise<void>;
@@ -16,6 +18,7 @@ export const Widget: React.FC<WidgetProps> = ({
   const [executingDelete, setExecutingDelete] = useState(false);
   const isLoading = submittingText || executingDelete;
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const resizeTextarea = useCallback(() => {
     const ref = textAreaRef.current;
@@ -52,6 +55,29 @@ export const Widget: React.FC<WidgetProps> = ({
     [onUpdateText],
   );
 
+  const onInputChange = useCallback(
+    (text: string) => {
+      resizeTextarea();
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => onFinishText(text), DEBOUNCE_MS);
+    },
+    [onFinishText, resizeTextarea],
+  );
+
+  const onBlurFlush = useCallback(
+    (text: string) => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      onFinishText(text);
+    },
+    [onFinishText],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
   const onClickDelete = useCallback(async () => {
     try {
       setExecutingDelete(true);
@@ -68,8 +94,8 @@ export const Widget: React.FC<WidgetProps> = ({
         className={styles.textarea}
         defaultValue={body}
         placeholder="Enter some text"
-        onInput={() => resizeTextarea()}
-        onBlur={(e) => onFinishText(e.target.value)}
+        onInput={(e) => onInputChange(e.currentTarget.value)}
+        onBlur={(e) => onBlurFlush(e.target.value)}
       />
       <button
         className={styles.deleteButton}

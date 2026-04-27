@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { WidgetContent } from "@/utils/types";
-import { getAllWidgets, createWidget } from "@/lib/store";
+import { widgetStore } from "@/lib/widgetStore";
 
 export async function GET(): Promise<NextResponse<WidgetContent[]>> {
-  return NextResponse.json(getAllWidgets());
+  return NextResponse.json(widgetStore.getAll());
 }
 
 export async function POST(): Promise<NextResponse<WidgetContent>> {
-  const widget = createWidget();
+  const widget = widgetStore.create();
   return NextResponse.json(widget, { status: 201 });
 }

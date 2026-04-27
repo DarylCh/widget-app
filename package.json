@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "docker": "docker build --no-cache -t widget-app . && docker run --rm -p 3000:3000 widget-app"
   },
   "dependencies": {
     "next": "16.2.4",

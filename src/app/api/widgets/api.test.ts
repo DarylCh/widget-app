@@ -13,15 +13,17 @@ const {
   mockRemoveWidget: vi.fn(),
 }));
 
-vi.mock("@/lib/store", () => ({
-  getAllWidgets: mockGetAllWidgets,
-  createWidget: mockCreateWidget,
-  updateWidget: mockUpdateWidget,
-  removeWidget: mockRemoveWidget,
+vi.mock("@/lib/widgetStore", () => ({
+  widgetStore: {
+    getAll: mockGetAllWidgets,
+    create: mockCreateWidget,
+    update: mockUpdateWidget,
+    remove: mockRemoveWidget,
+  },
 }));
 
-const { GET, POST } = await import("../app/api/widgets/route");
-const { PUT, DELETE } = await import("../app/api/widgets/[id]/route");
+const { GET, POST } = await import("./route");
+const { PUT, DELETE } = await import("@/app/api/widgets/[id]/route");
 
 const makeParams = (id: string) => ({ params: Promise.resolve({ id }) });
 
