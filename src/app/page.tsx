@@ -3,12 +3,6 @@ import { Widget } from "./components/Widget";
 import { useManageWidgets } from "./hooks/useManageWidgets";
 import styles from "./page.module.css";
 
-export type WidgetContent = {
-  id: string;
-  body: string;
-  createdAt: Date;
-};
-
 function Home() {
   const { widgets, loading, error, createWidget, removeWidget, updateWidgetText } =
     useManageWidgets();

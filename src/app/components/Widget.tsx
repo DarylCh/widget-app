@@ -93,7 +93,7 @@ export const Widget: React.FC<WidgetProps> = ({
         ref={textAreaRef}
         className={styles.textarea}
         defaultValue={body}
-        placeholder="Enter some text"
+        placeholder="Enter some text..."
         onInput={(e) => onInputChange(e.currentTarget.value)}
         onBlur={(e) => onBlurFlush(e.target.value)}
       />

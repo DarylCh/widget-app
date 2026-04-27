@@ -13,7 +13,7 @@ describe("Widget", () => {
 
   it("renders placeholder when body is empty", () => {
     render(<Widget body="" onUpdateText={noop} onDelete={noop} />);
-    expect(screen.getByPlaceholderText("Enter some text")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Enter some text...")).toBeInTheDocument();
   });
 
   it("renders a delete button", () => {
@@ -31,7 +31,7 @@ describe("Widget", () => {
   it("calls onUpdateText with new value on blur", async () => {
     const onUpdateText = vi.fn().mockResolvedValue(undefined);
     render(<Widget body="" onUpdateText={onUpdateText} onDelete={noop} />);
-    const textarea = screen.getByPlaceholderText("Enter some text");
+    const textarea = screen.getByPlaceholderText("Enter some text...");
     await userEvent.type(textarea, "new text");
     await userEvent.tab();
     expect(onUpdateText).toHaveBeenCalledWith("new text");
